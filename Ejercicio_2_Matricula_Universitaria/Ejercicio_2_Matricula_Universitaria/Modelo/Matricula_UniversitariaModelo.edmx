@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="Matricula_UniversitariaModelo.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
+        <EntityContainer Name="Matricula_UniversitariaModeloTargetContainer" >
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Matricula_UniversitariaModelo" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="Matricula_UniversitariaModeloContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Asignaturas" EntityType="Matricula_UniversitariaModelo.Asignatura" />
+          <EntitySet Name="Estudiantes" EntityType="Matricula_UniversitariaModelo.Estudiante" />
+          <EntitySet Name="Matriculas" EntityType="Matricula_UniversitariaModelo.Matricula" />
+          <EntitySet Name="Docentes" EntityType="Matricula_UniversitariaModelo.Docente" />
+          <AssociationSet Name="MatriculaEstudiante" Association="Matricula_UniversitariaModelo.MatriculaEstudiante">
+            <End Role="Matricula" EntitySet="Matriculas" />
+            <End Role="Estudiante" EntitySet="Estudiantes" />
+          </AssociationSet>
+          <AssociationSet Name="DocenteAsignatura" Association="Matricula_UniversitariaModelo.DocenteAsignatura">
+            <End Role="Docente" EntitySet="Docentes" />
+            <End Role="Asignatura" EntitySet="Asignaturas" />
+          </AssociationSet>
+          <AssociationSet Name="MatriculaAsignatura" Association="Matricula_UniversitariaModelo.MatriculaAsignatura">
+            <End Role="Matricula" EntitySet="Matriculas" />
+            <End Role="Asignatura" EntitySet="Asignaturas" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Asignatura">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Codigo" Type="String" Nullable="false" />
+          <Property Name="NombreAsig" Type="String" Nullable="false" />
+          <Property Name="Curso" Type="String" Nullable="false" />
+          <Property Name="Nota" Type="String" Nullable="false" />
+          <NavigationProperty Name="Docente" Relationship="Matricula_UniversitariaModelo.DocenteAsignatura" FromRole="Asignatura" ToRole="Docente" />
+          <Property Name="DocenteId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Matricula" Relationship="Matricula_UniversitariaModelo.MatriculaAsignatura" FromRole="Asignatura" ToRole="Matricula" />
+          <Property Name="MatriculaId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Estudiante">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Cedula" Type="String" Nullable="false" />
+          <Property Name="NombreEst" Type="String" Nullable="false" />
+          <Property Name="ApellidoEst" Type="String" Nullable="false" />
+          <Property Name="Direccion" Type="String" Nullable="false" />
+          <Property Name="EstadoCivil" Type="String" Nullable="false" />
+          <NavigationProperty Name="Matricula" Relationship="Matricula_UniversitariaModelo.MatriculaEstudiante" FromRole="Estudiante" ToRole="Matricula" />
+          <Property Name="MatriculaId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Matricula">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Estudiantes" Relationship="Matricula_UniversitariaModelo.MatriculaEstudiante" FromRole="Matricula" ToRole="Estudiante" />
+          <Property Name="Codigo" Type="String" Nullable="false" />
+          <Property Name="TipoEstudiante" Type="String" Nullable="false" />
+          <Property Name="Monto" Type="String" Nullable="false" />
+          <NavigationProperty Name="Asignaturas" Relationship="Matricula_UniversitariaModelo.MatriculaAsignatura" FromRole="Matricula" ToRole="Asignatura" />
+          <Property Name="NumAsignaturas" Type="String" Nullable="false" />
+          <Property Name="FechaInic" Type="String" Nullable="false" />
+          <Property Name="FechaFin" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Docente">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Codigo" Type="String" Nullable="false" />
+          <Property Name="NombreDoc" Type="String" Nullable="false" />
+          <NavigationProperty Name="Asignaturas" Relationship="Matricula_UniversitariaModelo.DocenteAsignatura" FromRole="Docente" ToRole="Asignatura" />
+          <Property Name="Salario" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="MatriculaEstudiante">
+          <End Type="Matricula_UniversitariaModelo.Matricula" Role="Matricula" Multiplicity="1" />
+          <End Type="Matricula_UniversitariaModelo.Estudiante" Role="Estudiante" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Matricula">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Estudiante">
+              <PropertyRef Name="MatriculaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="DocenteAsignatura">
+          <End Type="Matricula_UniversitariaModelo.Docente" Role="Docente" Multiplicity="1" />
+          <End Type="Matricula_UniversitariaModelo.Asignatura" Role="Asignatura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Docente">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Asignatura">
+              <PropertyRef Name="DocenteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MatriculaAsignatura">
+          <End Type="Matricula_UniversitariaModelo.Matricula" Role="Matricula" Multiplicity="1" />
+          <End Type="Matricula_UniversitariaModelo.Asignatura" Role="Asignatura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Matricula">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Asignatura">
+              <PropertyRef Name="MatriculaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
+        <Alias Key="Model" Value="Matricula_UniversitariaModelo" />
+        <Alias Key="Target" Value="Matricula_UniversitariaModelo.Store" />
+        <EntityContainerMapping CdmEntityContainer="Matricula_UniversitariaModeloContainer" StorageEntityContainer="Matricula_UniversitariaModeloTargetContainer">
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
